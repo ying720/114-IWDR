@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>線上訂購</title>
+  <link rel="stylesheet" href="css/order.css">
+</head>
+
+<body>
+
+  <!-- ===== Navbar ===== -->
+  <header>
+    <nav class="navbar">
+      <ul class="nav-links">
+        <li><a href="/homepage">首頁</a></li>
+        <li><a href="/menu">菜單</a></li>
+        <li><a href="/order" class="active">線上訂購</a></li>
+        <li><a href="/storepage">門市據點</a></li>
+        <li><a href="/brandStory">品牌故事</a></li>
+        <li><a href="/frequentlyaskedquestions">常見問題</a></li>
+      </ul>
+
+      <div class="hamburger">
+        <span></span><span></span><span></span>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <h1>線上訂購</h1>
+    </section>
+
+    <section class="container">
+      <!-- 商品區 -->
+      <div class="products" id="products"></div>
+
+      <!-- 購物車 -->
+      <aside class="cart">
+        <h3>購物車</h3>
+        <ul id="cartList"></ul>
+        <p>總金額：NT$ <span id="total">0</span></p>
+
+        <div class="checkout">
+          <input type="text" id="name" placeholder="姓名" />
+          <input type="tel" id="phone" placeholder="電話" />
+          <select id="pickup">
+            <option value="">取餐方式</option>
+            <option>門市自取</option>
+            <option>外送</option>
+          </select>
+          <button onclick="submitOrder()">送出訂單</button>
+        </div>
+      </aside>
+    </section>
+  </main>
+
+  <footer>
+    © 2025 飲料店線上訂購系統
+  </footer>
+
+  <script>
+    const products = [
+      { name: '月光玫瑰', price: { M: 90, L: 110 }, img: '/img/order-img/1moonlight_rose.png' },
+      { name: '晨露檸檬', price: { M: 85, L: 100 }, img: '/img/order-img/2morning_lemon.png' },
+      { name: '雲端焦糖', price: { M: 95, L: 115 }, img: '/img/order-img/3cloud_caramel.png' },
+      { name: '星雲莓果', price: { M: 100, L: 120 }, img: '/img/order-img/4nebula_berry.png' },
+      { name: '月影抹茶', price: { M: 100, L: 120 }, img: '/img/order-img/5moonlight_matcha.png' },
+      { name: '焦糖雲朵', price: { M: 95, L: 110 }, img: '/img/order-img/6caramel_cloud.png' },
+      { name: '星語茉莉', price: { M: 90, L: 110 }, img: '/img/order-img/7star_jasmine.png' },
+      { name: '琥珀烏龍', price: { M: 85, L: 100 }, img: '/img/order-img/8amber_oolong.png' },
+      { name: '霧之莓語', price: { M: 95, L: 115 }, img: '/img/order-img/9fog_berry.png' },
+      { name: '星霧奶香', price: { M: 95, L: 110 }, img: '/img/order-img/10star_fog_milk.png' },
+      { name: '晨曦蜜桃', price: { M: 85, L: 100 }, img: '/img/order-img/11morning_peach.png' },
+      { name: '月紗花語', price: { M: 90, L: 110 }, img: '/img/order-img/12moon_fog_flower.png' },
+      { name: '暮光摩卡', price: { M: 110, L: 130 }, img: '/img/order-img/13moonlight_mocha.png' },
+      { name: '星夜拿鐵', price: { M: 115, L: 135 }, img: '/img/order-img/14star_night_latte.png' },
+      { name: '月影卡布奇諾', price: { M: 120, L: 140 }, img: '/img/order-img/15moonlight_cappuccino.png' },
+      { name: '星落白玉奶茶', price: { M: 95, L: 115 }, img: '/img/order-img/16star_fog_milk.png' },
+      { name: '露晨青檸氣泡', price: { M: 85, L: 100 }, img: '/img/order-img/17morning_lemon_bubble.png' },
+      { name: '月霜琥珀紅茶', price: { M: 90, L: 110 }, img: '/img/order-img/18moon_fog_amber_tea.png' },
+      { name: '星空琉璃', price: { M: 95, L: 115 }, img: '/img/order-img/19star_luminous.png' },
+      { name: '月泉白霜', price: { M: 90, L: 110 }, img: '/img/order-img/20moon_fog_white.png' },
+      { name: '曦光莓語', price: { M: 100, L: 120 }, img: '/img/order-img/21morning_berry.png' },
+      { name: '星澈雲泡', price: { M: 95, L: 115 }, img: '/img/order-img/22star_cloud_bubble.png' },
+      { name: '月霧雪頂', price: { M: 105, L: 125 }, img: '/img/order-img/23moon_fog_snow.png' },
+      { name: '曦光氣泡', price: { M: 90, L: 110 }, img: '/img/order-img/24morning_bubble.png' }
+    ];
+
+    let cart = [];
+    const productDiv = document.getElementById('products');
+
+    products.forEach((p, i) => {
+      productDiv.innerHTML += `
+        <div class="card">
+          <img src="${p.img}">
+          <div class="info">
+            <h4>${p.name}</h4>
+            <p>M: NT$ ${p.price.M} / L: NT$ ${p.price.L}</p>
+
+            <div class="form-group">
+              <label>尺寸：</label>
+              <select id="size-${i}">
+                <option value="M">M</option>
+                <option value="L">L</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>數量：</label>
+              <input type="number" id="qty-${i}" value="1" min="1">
+            </div>
+
+            <div class="form-group">
+              <label>冰塊：</label>
+              <select id="ice-${i}">
+                <option>正常冰</option>
+                <option>少冰</option>
+                <option>去冰</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label>甜度：</label>
+              <select id="sugar-${i}">
+                <option>正常糖</option>
+                <option>半糖</option>
+                <option>微糖</option>
+                <option>無糖</option>
+              </select>
+            </div>
+
+            <button onclick="addToCart(${i})">加入購物車</button>
+          </div>
+        </div>
+      `;
+    });
+
+    // 購物車要存「客製化選項」
+    function addToCart(i) {
+      const p = products[i];
+
+      const size = document.getElementById(`size-${i}`).value; // M / L
+      const qty = Math.max(1, parseInt(document.getElementById(`qty-${i}`).value, 10) || 1);
+      const ice = document.getElementById(`ice-${i}`).value;
+      const sugar = document.getElementById(`sugar-${i}`).value;
+
+      const price = Number(p.price[size]); // 單價（後端吃 price）
+      if (!Number.isFinite(price)) {
+        alert('價格資料有誤');
+        return;
+      }
+
+      cart.push({
+        name: p.name,
+        size,
+        qty,
+        ice,
+        sugar,
+        price
+      });
+
+      renderCart();
+    }
+
+    // 正確計算總金額 + 顯示客製化明細 + 可刪除
+    function renderCart() {
+      const list = document.getElementById('cartList');
+      list.innerHTML = '';
+      let total = 0;
+
+      cart.forEach((item, idx) => {
+        const subtotal = item.price * item.qty;
+        total += subtotal;
+
+        list.innerHTML += `
+          <li>
+            <div>
+              <b>${item.name}</b>（${item.size}）x ${item.qty}<br>
+              <small>${item.ice} / ${item.sugar}</small>
+            </div>
+            <div>
+              NT$ ${subtotal}
+              <button onclick="removeItem(${idx})">刪除</button>
+            </div>
+          </li>
+        `;
+      });
+
+      document.getElementById('total').innerText = total;
+    }
+
+    function removeItem(idx) {
+      cart.splice(idx, 1);
+      renderCart();
+    }
+
+  // 送到後端 /api/order，並回傳 order_id -- 送出訂單
+    async function submitOrder() {
+      const nameEl = document.getElementById('name');
+      const phoneEl = document.getElementById('phone');
+      const pickupEl = document.getElementById('pickup');
+
+      if (cart.length === 0) { alert('購物車是空的'); return }
+      if (!nameEl.value.trim() || !phoneEl.value.trim() || !pickupEl.value) {
+        alert('請填寫完整資料');
+        return;
+      }
+      // trim()：去除前後空白 -- 只要有一個欄位是空的，就整個訂單不送出
+
+      // 算 total（關鍵）
+      const total = cart.reduce((sum, item) => sum + item.price * item.qty, 0);
+
+      // payload = 要送到 API 的資料本體（JSON）-- 組成要送到後端的資料
+      const payload = {
+        customer_name: nameEl.value.trim(),
+        phone: phoneEl.value.trim(),
+        pickup_method: pickupEl.value,
+        total,
+        cart: cart.map(item => ({
+          name: item.name,
+          price: item.price
+        }))
+      };
+
+      // 立刻驗證
+      console.log('payload total =', payload.total);
+
+      try {
+        const res = await fetch('/api/order', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        // fetch 是拿來傳送 POST 請求滴 // fetch 的 body 
+           // 👉 只能接收「字串或特定格式」 
+           // 👉 不能直接接收 JavaScript 物件
+
+        const data = await res.json();
+        alert(`訂單新增成功！訂單編號：${data.order_id}`);
+
+        cart = [];
+        renderCart();
+        nameEl.value = '';
+        phoneEl.value = '';
+        pickupEl.value = '';
+        //✔ 清空購物車 ✔ 重新渲染畫面 ✔ 清空表單
+
+      } catch (err) {
+        console.error(err);
+        alert('送出失敗：無法連線到伺服器');
+      }
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,191 @@
+body {
+  margin: 0;
+  overflow-x: hidden;
+  background: #fcf8f1;
+  background-size: 20px 20px;
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 5px, rgba(145, 63, 63, 0.02) 8px, transparent 7px), repeating-linear-gradient(-45deg, transparent, transparent 5px, rgba(0, 0, 0, 0.02) 6px, transparent 7px);
+}
+
+li {
+  list-style: none;
+}
+
+.navbar {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  background-color: #f3e9d2;
+  color: #fff;
+  position: fixed;
+  padding: 10px 20px;
+  top: 0;
+  width: 100%;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-left: -39px;
+  z-index: 10;
+}
+
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 40px;
+}
+
+.nav-links a {
+  color: #7a5e3c;
+  font-size: 16px;
+  position: relative;
+  padding-bottom: 6px;
+  text-decoration: none;
+}
+
+.nav-links a::after {
+  /* ::after 偽元素 在每個 <a> 超連結的內容後面自動生成一個空盒子。 */
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 0;
+  height: 2px;
+  background: #c6a663;
+  transition: 0.3s;
+}
+
+.nav-links a:hover::after,
+.nav-links a.active::after {
+  width: 100%
+}
+
+.hamburger {
+  display: none;
+  flex-direction: column;
+  cursor: pointer;
+}
+
+.hamburger span {
+  background-color: #B08968;
+  width: 25px;
+  height: 3px;
+  margin: 3px 0;
+  transition: all 0.3s ease;
+}
+
+@media (max-width: 981px) {
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    background-color: #F9EFD9;
+    width: 200px;
+    border-radius: 8px;
+    position: absolute;
+    /* 會相對於整個 <body> / viewport 定位 */
+    top: 40px;
+    right: 20px;
+    padding: 20px 20px;
+  }
+
+  .nav-links.active {
+    display: flex;
+    width: 40px;
+  }
+
+  .submenu {
+    position: static;
+    /* 讓子選單在手機版 直接跟在父選項下面顯示，而不是浮動「往外跑」。 absolute → 子選單像「懸浮的浮板」，漂浮在父選單旁邊 static → 子選單像「正常的文字段落」，跟著父選單自然排列*/
+    box-shadow: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+}
+
+
+/* ================= FAQ Header ================= */
+.faq-header {
+  margin-top: 120px;
+  text-align: center;
+}
+
+.faq-header h1 {
+  font-size: 36px;
+  color: #7a5230;
+}
+
+.faq-header p {
+  margin-top: 10px;
+  color: #a9744d;
+}
+
+/* ================= FAQ Content ================= */
+.faq-container {
+  width: 80%;
+  max-width: 900px;
+  margin: 60px auto;
+}
+
+.faq-group {
+  margin-bottom: 50px;
+}
+
+.faq-group h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  border-left: 6px solid #c6a663;
+  padding-left: 10px;
+}
+
+details {
+  background: #fff;
+  border-radius: 12px;
+  padding: 15px 20px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  cursor: pointer;
+}
+
+summary {
+  font-weight: bold;
+  color: #7a5e3c;
+}
+
+details p {
+  margin-top: 12px;
+  line-height: 1.7;
+}
+
+/* ================= Footer ================= */
+.footer {
+  text-align: center;
+  padding: 30px 0;
+  background: #f3e9d2;
+  color: #7a5e3c;
+}
+
+/* ================= RWD ================= */
+
+@media (max-width: 981px) {
+  .nav-links {
+    display: none;
+    flex-direction: column;
+    background-color: #F9EFD9;
+    width: 200px;
+    border-radius: 8px;
+    position: absolute;
+    top: 50px;
+    right: 20px;
+  }
+
+  .nav-links.active {
+    display: flex;
+  }
+
+  .submenu {
+    position: static;
+    box-shadow: none;
+  }
+
+  .hamburger {
+    display: flex;
+  }
+}
