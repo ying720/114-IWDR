@@ -1,6 +1,10 @@
+// 引入 Express 套件(用於建立伺服器)
 const express = require('express');
+// 引入 Node.js 內建的 path 模組(處理路徑)
 const path = require('path');
+// 建立一個 Express 應用程式實體(之後所有設定都會寫在 app 裡)
 const app = express();
+// 設定伺服器要監聽的埠號（Port）
 const port = 3000;
 
 // 解析 JSON
